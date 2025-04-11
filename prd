@@ -1,1 +1,15 @@
+git checkout dev || { echo "Ошибка: Ветка dev не найдена."; exit 1; }
 
+git pull origin dev || { echo "Ошибка: Не удалось обновить ветку dev."; exit 1; }
+
+git checkout prd || { echo "Ошибка: Ветка prd не найдена."; exit 1; }
+
+git pull origin prd || { echo "Ошибка: Не удалось обновить ветку prd."; exit 1; }
+
+git merge dev --no-ff -m "Merge dev into prd" || { echo "Ошибка: Не удалось выполнить мердж."; exit 1; }
+
+TAG_NAME="release-$(date +%Y%m%d%H%M%S)"
+git tag $TAG_NAME || { echo "Ошибка: Не удалось создать тег."; exit 1; }
+
+git push origin prd || { echo "Ошибка: Не удалось отправить изменения в prd."; exit 1; }
+git push origin $TAG_NAME || { echo "Ошибка: Не удалось отправить тег."; exit 1; }
